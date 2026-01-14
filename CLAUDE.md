@@ -63,6 +63,151 @@ All MCP servers must be configured in `~/.claude.json` (user-level) to prevent c
 
 Run `/mcp` in Claude Code to verify all four servers are connected.
 
+## Secret Management with Infisical
+
+This starter template supports integration with Infisical CLI for automated secret management. Infisical CLI is a **host-system tool** that should be installed globally on the developer's machine, not per-repository.
+
+### Prerequisites
+
+Developers need:
+1. **Infisical CLI installed** at `~/.local/bin/infisical-cli` (wrapper) and `~/.local/bin/infisical` (official binary)
+2. **Credentials file** at `~/.infisical-machine-identity` with:
+   - `INFISICAL_API_URL` - Self-hosted instance URL
+   - `INFISICAL_CLIENT_ID` - Machine identity client ID
+   - `INFISICAL_CLIENT_SECRET` - Machine identity secret
+   - `INFISICAL_PROJECT_ID` - Project ID for this repository
+   - `INFISICAL_ENVIRONMENT` - Target environment (dev/staging/prod)
+   - `INFISICAL_SECRET_PATH` - Path within the project (default: `/`)
+
+### Available Tools
+
+**infisical-helper** (Quick retrieval in scripts):
+```bash
+# Get a single secret value
+SECRET=$(infisical-helper get SECRET_NAME)
+```
+
+**infisical-cli** (Full-featured for development):
+```bash
+# Run application with ALL secrets injected as environment variables
+infisical-cli run -- npm run dev
+infisical-cli run -- python app.py
+infisical-cli run -- go run main.go
+
+# Export secrets to .env file (for local development only)
+infisical-cli export --format=dotenv > .env.local
+
+# List all available secrets
+infisical-cli secrets
+
+# Get specific secret
+infisical-cli secrets get SECRET_NAME
+
+# Security scan for leaked secrets
+infisical-cli scan
+```
+
+### Claude Code Integration Patterns
+
+When working with projects that require secrets:
+
+**1. Development Workflow**
+```bash
+# Instead of manual .env files, use infisical-cli run
+infisical-cli run -- npm start
+infisical-cli run -- npm run dev
+infisical-cli run -- npm test
+
+# For Python projects
+infisical-cli run -- python manage.py runserver
+infisical-cli run -- uvicorn app:app --reload
+
+# For Go projects
+infisical-cli run -- go run main.go
+```
+
+**2. CI/CD Integration**
+```bash
+# Export secrets in CI pipeline
+infisical-cli export --format=dotenv > .env
+source .env
+```
+
+**3. Security Scanning**
+```bash
+# Scan for leaked secrets before commits
+infisical-cli scan
+infisical-cli scan --path=./src
+```
+
+### When to Use Which Tool
+
+**Use `infisical-helper`** when:
+- Writing shell scripts that need a single secret
+- Quick one-off secret retrieval
+- Minimal overhead is critical
+
+**Use `infisical-cli`** when:
+- Running applications that need multiple secrets
+- Exporting secrets to files
+- Performing security scans
+- Working with complex development workflows
+
+### Security Best Practices
+
+1. **Never commit secrets** - Always use `.gitignore` patterns for:
+   - `.env`
+   - `.env.local`
+   - `.env.*.local`
+   - `*credentials*.json`
+   - Any files containing actual secret values
+
+2. **Use `.env.example`** - Commit example files with placeholder values:
+   ```
+   # .env.example
+   DATABASE_URL=postgresql://user:pass@localhost:5432/dbname
+   API_KEY=your_api_key_here
+   ```
+
+3. **Scan before commits** - Set up pre-commit hooks:
+   ```bash
+   infisical-cli scan
+   ```
+
+4. **Document secret requirements** - In README.md, list which secrets are needed:
+   ```markdown
+   ## Required Secrets
+   - `DATABASE_URL` - PostgreSQL connection string
+   - `API_KEY` - External API authentication key
+   ```
+
+5. **Use environment-specific secrets** - Configure different Infisical environments:
+   - `dev` - Local development
+   - `staging` - Staging environment
+   - `prod` - Production (separate credentials!)
+
+### Architecture Decisions
+
+**Why Infisical CLI?**
+- **Automated retrieval**: No manual copy-paste of secrets
+- **Fresh tokens**: Auto-refreshed authentication per command
+- **Security**: No long-lived tokens in environment
+- **Auditability**: Centralized secret access logging
+- **Team consistency**: All developers use same secret source
+
+**Why wrapper script?**
+- **Zero configuration**: Automatically sources credentials from `~/.infisical-machine-identity`
+- **Security isolation**: Temporary tokens, no global environment pollution
+- **Convenience**: No manual authentication needed
+- **Compatibility**: Works alongside existing `infisical-helper` tool
+
+### Documentation References
+
+For detailed Infisical setup and usage:
+- **TechKB**: Check host system for `TechKB/40-services/infisical/` documentation
+- **Quick reference**: `TechKB/80-reference/quick-ref/Infisical-Commands.md`
+- **Official docs**: https://infisical.com/docs/cli/overview
+
 ## Getting Started Workflow
 
 1. **Create from template**: Use GitHub's "Use this template" button

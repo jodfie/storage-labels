@@ -261,7 +261,7 @@ show_config_summary() {
   echo "  1. Substitute template values with project-specific configuration"
   echo "  2. Remove existing .claude/, .serena/, .taskmaster/ directories"
   echo "  3. Deploy configured templates to project root"
-  echo "  4. Remove all template-specific files (README, docs, workflows, etc.)"
+  echo "  4. Remove template-specific files (preserves: docs/, .gitignore)"
   echo "  5. Generate minimal README.md"
   if ! $NO_COMMIT; then
     echo "  6. Commit and push changes"
@@ -328,6 +328,7 @@ execute_cleanup() {
     ! -name '.serena' \
     ! -name '.taskmaster' \
     ! -name 'bootstrap.sh' \
+    ! -name 'docs' \
     -exec rm -rf {} +
 
   log_step "Generating minimal README..."

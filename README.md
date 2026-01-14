@@ -46,6 +46,13 @@ This is a starter template repository designed to provide a complete development
   - Task Master integration guide with 400+ lines of best practices
   - Complete workflow specification and command references
 
+- **🔐 Secret Management (Optional)**
+  - Infisical CLI integration for automated secret retrieval
+  - Security scanning for leaked secrets in commits
+  - Development workflow patterns for Node.js, Python, Go, and more
+  - Team-oriented best practices and access control
+  - See [Infisical Integration Guide](./docs/infisical-integration.md) for setup
+
 ## Requirements
 
 You will need the following on your workstation:
@@ -197,7 +204,29 @@ Here's an example `mcpServers` object that you can use as a reference:
 
 5. Update the `README.md` with a full description of your project, then run `chmod +x bootstrap.sh && ./bootstrap.sh` to finalize initialization of the repo.
 
-6. Profit
+6. **(Optional) Set up Infisical for secret management**:
+   
+   If your project requires secrets (API keys, database credentials, etc.), consider setting up Infisical CLI:
+   
+   - **Host Setup** (one-time per machine):
+     - Install Infisical CLI: See [Infisical Integration Guide](./docs/infisical-integration.md#prerequisites)
+     - Configure credentials in `~/.infisical-machine-identity`
+     - Verify: `infisical-cli secrets`
+   
+   - **Repository Setup**:
+     - Create `.env.example` with placeholder values (commit this)
+     - Document required secrets in README
+     - Add pre-commit hooks for secret scanning
+     - See [Secret Management Best Practices](./docs/secret-management-best-practices.md)
+   
+   **Run your app with secrets**:
+   ```bash
+   # Instead of manual .env files
+   infisical-cli run -- npm run dev
+   infisical-cli run -- python app.py
+   ```
+
+7. Profit
 
 ### Post-Init Settings
 

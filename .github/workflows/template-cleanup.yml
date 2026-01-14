@@ -133,7 +133,7 @@ jobs:
           cp .github/templates/bootstrap.sh .
 
           # Complete cleanup - remove everything except preserved files/directories
-          # Preserve: .git/, .gitignore, .serena/, .taskmaster/, .claude/
+          # Preserve: .git/, .gitignore, .serena/, .taskmaster/, .claude/, docs/
           find . -mindepth 1 -maxdepth 1 \
             ! -name '.git' \
             ! -name '.gitignore' \
@@ -141,6 +141,7 @@ jobs:
             ! -name '.serena' \
             ! -name '.taskmaster' \
             ! -name 'bootstrap.sh' \
+            ! -name 'docs' \
             -exec rm -rf {} +
 
           # Generate minimal README
