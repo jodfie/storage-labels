@@ -77,7 +77,7 @@
       }
     ]
   },
-  "model": "claude-opus-4-5",
+  "model": "default",
   "statusLine": {
     "type": "command",
     "command": "bash $CLAUDE_PROJECT_DIR/.claude/scripts/statusline.sh"
