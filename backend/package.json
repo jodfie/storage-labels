@@ -9,7 +9,12 @@
     "start": "node dist/index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": ["storage", "inventory", "qr-code", "pwa"],
+  "keywords": [
+    "storage",
+    "inventory",
+    "qr-code",
+    "pwa"
+  ],
   "author": "",
   "license": "MIT",
   "dependencies": {
@@ -25,6 +30,7 @@
     "@types/express": "^5.0.6",
     "@types/multer": "^2.0.0",
     "@types/node": "^25.0.9",
+    "@types/pg": "^8.16.0",
     "@types/qrcode": "^1.5.6",
     "nodemon": "^3.1.11",
     "tsx": "^4.21.0",

@@ -1,40 +1,32 @@
 import { Router } from 'express';
+import {
+  generateContainer,
+  getAllContainers,
+  getContainerByQRCode,
+  updateContainer,
+  deleteContainer,
+  getContainerItems,
+} from '../controllers/containerController';
 
 const router = Router();
 
+// POST /api/containers/generate - Generate new container with QR code
+// This must come BEFORE /:qr_code to avoid conflicts
+router.post('/generate', generateContainer);
+
 // GET /api/containers - List all containers
-router.get('/', async (req, res) => {
-  res.json({ message: 'List containers - TODO' });
-});
+router.get('/', getAllContainers);
 
 // GET /api/containers/:qr_code - Get container by QR code
-router.get('/:qr_code', async (req, res) => {
-  res.json({ message: `Get container ${req.params.qr_code} - TODO` });
-});
-
-// POST /api/containers/generate - Generate new container with QR code
-router.post('/generate', async (req, res) => {
-  res.json({ message: 'Generate container - TODO' });
-});
+router.get('/:qr_code', getContainerByQRCode);
 
 // PUT /api/containers/:id - Update container
-router.put('/:id', async (req, res) => {
-  res.json({ message: `Update container ${req.params.id} - TODO` });
-});
+router.put('/:id', updateContainer);
 
 // DELETE /api/containers/:id - Delete container
-router.delete('/:id', async (req, res) => {
-  res.json({ message: `Delete container ${req.params.id} - TODO` });
-});
+router.delete('/:id', deleteContainer);
 
 // GET /api/containers/:id/items - Get items in container
-router.get('/:id/items', async (req, res) => {
-  res.json({ message: `List items in container ${req.params.id} - TODO` });
-});
-
-// POST /api/containers/:id/items - Add item to container
-router.post('/:id/items', async (req, res) => {
-  res.json({ message: `Add item to container ${req.params.id} - TODO` });
-});
+router.get('/:id/items', getContainerItems);
 
 export default router;

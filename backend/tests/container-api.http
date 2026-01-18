@@ -1,0 +1,91 @@
+### Container API Test File
+### Use with REST Client extension in VS Code or manually with curl
+
+@baseUrl = http://localhost:3001/api
+
+### Health Check
+GET {{baseUrl}}/../health
+
+### 1. Generate a new container (auto-assign color and number)
+POST {{baseUrl}}/containers/generate
+Content-Type: application/json
+
+{
+  "description": "Holiday decorations - Christmas ornaments and lights"
+}
+
+### 2. Generate a new container with specific color and number
+POST {{baseUrl}}/containers/generate
+Content-Type: application/json
+
+{
+  "color": "Red",
+  "number": 1,
+  "description": "Family photos from 2020-2023",
+  "location_text": "Attic-Left-A2"
+}
+
+### 3. Generate another container
+POST {{baseUrl}}/containers/generate
+Content-Type: application/json
+
+{
+  "color": "Blue",
+  "number": 15,
+  "description": "Tax documents 2020-2024"
+}
+
+### 4. Get all containers
+GET {{baseUrl}}/containers
+
+### 5. Get container by QR code
+GET {{baseUrl}}/containers/Red-01
+
+### 6. Get container by QR code (Blue-15)
+GET {{baseUrl}}/containers/Blue-15
+
+### 7. Update container
+# Replace {container-id} with actual UUID from previous responses
+PUT {{baseUrl}}/containers/{container-id}
+Content-Type: application/json
+
+{
+  "description": "Updated: Holiday decorations - Christmas and Halloween",
+  "location_text": "Garage-A1"
+}
+
+### 8. Get items in container
+# Replace {container-id} with actual UUID
+GET {{baseUrl}}/containers/{container-id}/items
+
+### 9. Delete container
+# Replace {container-id} with actual UUID
+DELETE {{baseUrl}}/containers/{container-id}
+
+### 10. Try to generate duplicate container (should fail with 409)
+POST {{baseUrl}}/containers/generate
+Content-Type: application/json
+
+{
+  "color": "Red",
+  "number": 1,
+  "description": "This should fail - Red-01 already exists"
+}
+
+### 11. Test invalid color
+POST {{baseUrl}}/containers/generate
+Content-Type: application/json
+
+{
+  "color": "InvalidColor",
+  "number": 1
+}
+
+### 12. Test invalid number
+POST {{baseUrl}}/containers/generate
+Content-Type: application/json
+
+{
+  "color": "Red",
+  "number": 100
+}
