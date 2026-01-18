@@ -1,0 +1,407 @@
+<context>
+# Overview
+Storage Labels is a self-hosted Progressive Web Application (PWA) for organizing physical storage containers using QR code labels. The system allows users to print color-coded QR labels, attach them to storage containers, scan the labels to catalog contents, and search to quickly locate items later.
+
+Target Users: Families organizing home storage (attic, garage, basement)
+Primary Use Case: Long-term storage organization with easy retrieval
+Value Proposition: Self-hosted alternative to commercial QR label systems with full data control
+
+# Core Features
+
+## QR Code Label Generation
+- Generate unique QR codes in COLOR-NUMBER format (e.g., Red-01, Blue-15)
+- Support 8 colors: Red, Blue, Green, Yellow, Orange, Purple, Pink, Turquoise
+- Number range: 01-99 per color (792 total unique containers)
+- Print-ready label output for standard label sheets
+- Color-coded for visual identification matching physical stickers
+
+## Camera-Based Scanning
+- Use device camera to scan QR codes
+- Instant container lookup by scanned code
+- Works on mobile devices (primary use case)
+- Browser-based (no app installation required)
+
+## Item Inventory Management
+- Add multiple items per container
+- Item properties: name, description, quantity
+- Photo upload for each item (via camera or file upload)
+- Edit and delete items
+- View all items in a container
+
+## Location Tracking
+- Predefined locations: Attic-Left, Attic-Right, Garage-A1, Garage-A2, Basement
+- Ability to add custom locations
+- Assign containers to locations
+- Free-text location override option
+
+## Full-Text Search
+- Search across all containers and items
+- Search by item name, description, container description
+- Fast results using PostgreSQL full-text search
+- Display search results with container context
+
+# User Experience
+
+## User Personas
+- **Primary**: Homeowner organizing family archives and seasonal storage
+- **Secondary**: Parent managing children's keepsakes and memorabilia
+- **Tertiary**: DIY enthusiast organizing tools and equipment
+
+## Key User Flows
+
+### New Container Setup
+1. Open app → Generate Container
+2. Select color and number (or auto-assign next available)
+3. Print QR label
+4. Attach label to physical container
+5. Scan label to start adding items
+
+### Adding Items to Container
+1. Scan container QR code (or search for container)
+2. Tap "Add Item"
+3. Take photo of item
+4. Enter name and description
+5. Set quantity
+6. Save item
+
+### Finding Items
+1. Open app → Search
+2. Type item name or description
+3. View results showing which container(s) contain the item
+4. Tap result to see container details and location
+
+## UI/UX Considerations
+- Mobile-first design (primary device is smartphone)
+- Large touch targets (minimum 44px)
+- Bottom navigation bar for easy thumb access
+- Camera-first workflow (minimize typing)
+- Quick actions for common tasks
+- Responsive design works on desktop
+- Dark mode support
+- Offline-capable PWA
+</context>
+
+<PRD>
+# Technical Architecture
+
+## System Components
+
+### Frontend (React 18 + TypeScript + Vite)
+- Progressive Web App with service worker
+- Camera API integration for QR scanning and photos
+- html5-qrcode library for QR code reading
+- Responsive UI with mobile-first design
+- Local storage for offline capability
+- Image compression before upload
+
+### Backend (Node.js + Express + TypeScript)
+- RESTful API
+- File upload handling (multer)
+- QR code generation (qrcode npm package)
+- Image storage on filesystem
+- PostgreSQL connection pooling
+- CORS configuration for PWA
+
+### Database (PostgreSQL 15)
+- UUID primary keys for all entities
+- Full-text search indexes (GIN)
+- Foreign key constraints
+- Automatic timestamp triggers
+- Unique constraints on QR codes
+
+## Data Models
+
+### Containers
+- id (UUID)
+- qr_code (VARCHAR, unique) - format: "Color-Number"
+- color (VARCHAR)
+- number (INTEGER)
+- location_id (UUID, nullable FK to locations)
+- location_text (VARCHAR, free-text override)
+- description (TEXT)
+- photo_url (VARCHAR, container photo)
+- created_at, updated_at (TIMESTAMP)
+
+### Items
+- id (UUID)
+- container_id (UUID, FK to containers, cascade delete)
+- name (VARCHAR)
+- description (TEXT)
+- quantity (INTEGER, default 1)
+- photo_url (VARCHAR)
+- created_at, updated_at (TIMESTAMP)
+
+### Locations
+- id (UUID)
+- name (VARCHAR, unique)
+- description (TEXT)
+- created_at (TIMESTAMP)
+
+## APIs and Integrations
+- Camera API (browser native)
+- File System API for image storage
+- Service Worker API for offline support
+- Web App Manifest for PWA installation
+
+## Infrastructure Requirements
+- Docker containers for all services
+- PostgreSQL database with persistent volume
+- File system volume for image uploads
+- Cloudflare Tunnel for external access
+- SSL/TLS via Cloudflare
+- Authentication via Cloudflare Access (single-user)
+
+# Development Roadmap
+
+## Phase 1: MVP - Core Functionality
+**Goal**: Working system for creating containers and cataloging items
+
+### 1.1 Backend Foundation
+- Express server setup with TypeScript
+- PostgreSQL connection and schema
+- Health check endpoint
+- Error handling middleware
+- CORS configuration
+
+### 1.2 Container Management API
+- POST /api/containers/generate - Create container with QR code
+- GET /api/containers - List all containers
+- GET /api/containers/:qr_code - Get container by QR code
+- PUT /api/containers/:id - Update container
+- DELETE /api/containers/:id - Delete container
+- QR code generation logic
+- Color-number validation
+- Uniqueness enforcement
+
+### 1.3 Item Management API
+- POST /api/containers/:id/items - Add item to container
+- GET /api/containers/:id/items - List items in container
+- PUT /api/items/:id - Update item
+- DELETE /api/items/:id - Delete item
+- File upload handling for photos
+- Image storage on filesystem
+- Image validation (size, type)
+
+### 1.4 Search API
+- GET /api/search?q={query} - Full-text search
+- PostgreSQL full-text search implementation
+- Search across containers and items
+- Return results with container context
+
+### 1.5 Frontend Foundation
+- React app setup with Vite
+- TypeScript configuration
+- API client setup
+- Routing structure
+- Global state management
+- Error handling
+
+### 1.6 Container Features (Frontend)
+- Container list view
+- Container detail view
+- Generate new container form
+- Edit container form
+- Delete container confirmation
+- Display QR code image
+
+### 1.7 Item Features (Frontend)
+- Item list within container
+- Add item form with camera
+- Edit item form
+- Delete item confirmation
+- Photo display and upload
+- Camera integration
+
+### 1.8 Search Feature (Frontend)
+- Search input component
+- Search results display
+- Result item linking to containers
+- Highlight search terms in results
+
+## Phase 2: Enhanced Features
+**Goal**: PWA capabilities and improved user experience
+
+### 2.1 PWA Configuration
+- Web App Manifest
+- Service worker setup
+- Offline page caching
+- Installability prompts
+- App icons and splash screens
+
+### 2.2 Offline Mode
+- Cache API integration
+- IndexedDB for offline data
+- Sync when online
+- Offline indicator
+- Conflict resolution
+
+### 2.3 QR Code Scanning
+- html5-qrcode integration
+- Camera permission handling
+- QR code detection
+- Scan result processing
+- Navigate to scanned container
+
+### 2.4 Print Features
+- Printable QR label component
+- Label sheet templates (Avery compatible)
+- Print dialog integration
+- Multiple labels per sheet
+- Label positioning
+
+### 2.5 Location Management
+- Location CRUD operations
+- Location selection UI
+- Custom location creation
+- Location filtering
+
+### 2.6 Advanced Search
+- Filter by location
+- Filter by color
+- Sort options
+- Pagination
+- Search history
+
+### 2.7 Photo Gallery
+- Grid view of all item photos
+- Lightbox for full-size view
+- Photo navigation
+- Download photos
+
+### 2.8 UI Polish
+- Dark mode toggle
+- Loading states
+- Empty states
+- Error messages
+- Success notifications
+- Responsive breakpoints
+
+## Phase 3: Deployment & Integration
+**Goal**: Production deployment and optional integrations
+
+### 3.1 Docker Production Build
+- Multi-stage Dockerfile for frontend
+- Production Dockerfile for backend
+- docker-compose.yml for production
+- Environment variable management
+- Volume configuration
+
+### 3.2 Cloudflare Tunnel Setup
+- Tunnel configuration for storage.redleif.dev
+- DNS configuration
+- SSL/TLS setup
+- Cloudflare Access integration
+
+### 3.3 Database Backup
+- pg_dump automation
+- Backup to external storage
+- Restore procedures
+- Backup schedule
+
+### 3.4 Export Functionality
+- Export containers to CSV
+- Export items to CSV
+- Export all data as JSON
+- Import from CSV/JSON
+
+### 3.5 Mobile Optimizations
+- Touch gesture improvements
+- Mobile navigation enhancements
+- iOS-specific PWA features
+- Android-specific PWA features
+
+### 3.6 Optional: iOS Shortcuts
+- Shortcut to scan container
+- Shortcut to add item
+- Quick search shortcut
+
+### 3.7 Optional: BasicMemory Integration
+- Export inventory to markdown
+- Sync with knowledge base
+- Archive documentation
+
+# Logical Dependency Chain
+
+## Foundation First (Must Build First)
+1. Database schema and migrations (enables all features)
+2. Backend API structure (enables frontend)
+3. Frontend app structure (enables UI features)
+
+## Quick Visible Progress
+4. Container generation (first tangible feature)
+5. Container list view (see what was created)
+6. Item addition with photos (core value proposition)
+7. Search functionality (prove the system works)
+
+## Build Upon Foundation
+8. QR code scanning (enhances container lookup)
+9. Print features (completes physical workflow)
+10. Location management (organizational improvement)
+11. PWA features (offline capability)
+12. Advanced search and filters (usability enhancement)
+13. Photo gallery (nice-to-have)
+14. Export/backup (data safety)
+15. Deployment and integrations (production ready)
+
+## Atomic Feature Scoping
+- Each task should be independently testable
+- Each task should add visible functionality
+- Tasks should not depend on Phase 3 features
+- Each phase should result in a usable system
+- Features can be improved in subsequent phases
+
+# Risks and Mitigations
+
+## Technical Challenges
+**Risk**: Camera API compatibility across devices
+**Mitigation**: Test on iOS Safari and Android Chrome early; provide fallback file upload
+
+**Risk**: Offline sync conflicts
+**Mitigation**: Last-write-wins strategy; show conflict warning to user
+
+**Risk**: Image storage scaling
+**Mitigation**: Implement image compression; set max file size; consider object storage later
+
+## MVP Definition
+**Risk**: Feature creep delaying initial release
+**Mitigation**: Strict MVP scope = Phase 1 only; defer all Phase 2/3 features
+
+**Risk**: QR scanning complexity
+**Mitigation**: Build manual search first; add scanning in Phase 2
+
+## Resource Constraints
+**Risk**: Time to complete all phases
+**Mitigation**: Ship Phase 1 as v1.0; incremental releases for Phase 2/3
+
+**Risk**: Single-user vs multi-user
+**Mitigation**: Design for single-user; Cloudflare Access handles auth; multi-user is future enhancement
+
+# Appendix
+
+## Color Hex Codes
+- Red: #EF4444
+- Blue: #3B82F6
+- Green: #10B981
+- Yellow: #F59E0B
+- Orange: #F97316
+- Purple: #A855F7
+- Pink: #EC4899
+- Turquoise: #14B8A6
+
+## Similar Commercial Products
+- QRSmartLabels.com (inspiration)
+- Sortly (mobile inventory)
+- Nest Egg (home inventory)
+
+## Technical Stack Decisions
+- **Why React**: Component reusability, PWA support, large ecosystem
+- **Why PostgreSQL**: Full-text search, reliability, ACID compliance
+- **Why TypeScript**: Type safety across frontend and backend
+- **Why Vite**: Fast development, modern tooling, PWA support
+- **Why self-hosted**: Data privacy, no subscription, full control
+
+## Development Environment
+- Docker Compose for local development
+- Hot reload for frontend and backend
+- PostgreSQL with test data seeds
+- VS Code with TypeScript extensions
