@@ -44,7 +44,7 @@
           "id": "1.4",
           "title": "Search API",
           "description": "Full-text search across containers and items",
-          "status": "pending",
+          "status": "done",
           "priority": "medium",
           "dependencies": ["1.3"],
           "details": "GET /api/search?q={query}. Use PostgreSQL full-text search with ts_vector. Search across container descriptions and item names/descriptions. Return results with container context.",
@@ -272,7 +272,7 @@
     "lastModified": "2026-01-18T21:00:00.000Z",
     "projectName": "storage-labels",
     "totalTasks": 24,
-    "completedTasks": 4,
+    "completedTasks": 5,
     "phases": 3
   }
 }

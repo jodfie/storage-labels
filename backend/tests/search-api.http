@@ -1,0 +1,120 @@
+### Search API Test File
+### Use with REST Client extension in VS Code or manually with curl
+
+@baseUrl = http://localhost:3001/api
+
+### Setup: Create test data first
+
+### 1. Create containers with descriptive content
+POST {{baseUrl}}/containers/generate
+Content-Type: application/json
+
+{
+  "color": "Red",
+  "number": 5,
+  "description": "Holiday decorations - Christmas ornaments and lights"
+}
+
+###
+POST {{baseUrl}}/containers/generate
+Content-Type: application/json
+
+{
+  "color": "Blue",
+  "number": 10,
+  "description": "Winter clothing - jackets, scarves, gloves"
+}
+
+###
+POST {{baseUrl}}/containers/generate
+Content-Type: application/json
+
+{
+  "color": "Green",
+  "number": 15,
+  "description": "Kitchen supplies - utensils, pots, pans"
+}
+
+### 2. Add items to containers (replace {container-id} with actual IDs)
+POST {{baseUrl}}/containers/{container-id}/items
+Content-Type: application/json
+
+{
+  "name": "Christmas Tree Ornaments",
+  "description": "Red and gold glass ornaments, set of 24",
+  "quantity": 1
+}
+
+###
+POST {{baseUrl}}/containers/{container-id}/items
+Content-Type: application/json
+
+{
+  "name": "Winter Jacket",
+  "description": "Navy blue Columbia jacket, size L, waterproof",
+  "quantity": 1
+}
+
+###
+POST {{baseUrl}}/containers/{container-id}/items
+Content-Type: application/json
+
+{
+  "name": "Red Scarf",
+  "description": "Hand-knitted wool scarf, warm for winter",
+  "quantity": 2
+}
+
+###
+POST {{baseUrl}}/containers/{container-id}/items
+Content-Type: application/json
+
+{
+  "name": "Cooking Pot Set",
+  "description": "Stainless steel pots with lids, 5-piece set",
+  "quantity": 1
+}
+
+### Search Tests
+
+### 3. Search for "Christmas" (should find container and items)
+GET {{baseUrl}}/search?q=Christmas
+
+### 4. Search for "winter" (should find container and items)
+GET {{baseUrl}}/search?q=winter
+
+### 5. Search for "jacket" (should find item)
+GET {{baseUrl}}/search?q=jacket
+
+### 6. Search for "red" (should find multiple results - color and scarf)
+GET {{baseUrl}}/search?q=red
+
+### 7. Search for "kitchen" (should find container)
+GET {{baseUrl}}/search?q=kitchen
+
+### 8. Search for "stainless steel" (should find cooking pot)
+GET {{baseUrl}}/search?q=stainless steel
+
+### 9. Multi-word search
+GET {{baseUrl}}/search?q=holiday decorations
+
+### 10. Search with special characters (should be handled gracefully)
+GET {{baseUrl}}/search?q=pot's & pans!
+
+### 11. Search for non-existent term (should return empty results)
+GET {{baseUrl}}/search?q=nonexistentitem12345
+
+### 12. Empty search query (should return 400 error)
+GET {{baseUrl}}/search?q=
+
+### 13. Missing query parameter (should return 400 error)
+GET {{baseUrl}}/search
+
+### 14. Search with single character (should work)
+GET {{baseUrl}}/search?q=a
+
+### 15. Case-insensitive search
+GET {{baseUrl}}/search?q=CHRISTMAS
+
+### 16. Partial word match
+GET {{baseUrl}}/search?q=ornam

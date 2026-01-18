@@ -274,6 +274,99 @@ Delete an item and its photo.
 
 ---
 
+## Search Endpoints
+
+### Full-Text Search
+Search across all containers and items.
+
+**GET** `/search?q={query}`
+
+**Query Parameters:**
+- `q` (required): Search query string
+
+**Example:** `/search?q=winter jacket`
+
+**Response:** `200 OK`
+```json
+{
+  "query": "winter jacket",
+  "results": [
+    {
+      "type": "item",
+      "relevance": 0.607927,
+      "container_id": "uuid",
+      "container_qr_code": "Blue-10",
+      "container_color": "Blue",
+      "container_number": 10,
+      "container_description": "Winter clothing",
+      "container_location_text": "Attic-Left",
+      "item_id": "uuid",
+      "item_name": "Winter Jacket",
+      "item_description": "Navy blue Columbia jacket",
+      "item_quantity": 1,
+      "item_photo_url": "/uploads/items/item-123.jpg"
+    },
+    {
+      "type": "container",
+      "relevance": 0.304318,
+      "container_id": "uuid",
+      "container_qr_code": "Blue-10",
+      "container_color": "Blue",
+      "container_number": 10,
+      "container_description": "Winter clothing - jackets, scarves",
+      "container_location_text": "Attic-Left"
+    }
+  ],
+  "total": 2,
+  "execution_time_ms": 45
+}
+```
+
+**Result Types:**
+- `container` - Match found in container description
+- `item` - Match found in item name or description
+
+**Search Features:**
+- Full-text search using PostgreSQL ts_vector
+- Searches container descriptions
+- Searches item names and descriptions
+- Results sorted by relevance (highest first)
+- Case-insensitive
+- Handles special characters gracefully
+- Multi-word queries supported
+
+**Container Context:**
+All results include container information:
+- For container results: Full container details
+- For item results: Associated container details + item details
+
+**Relevance Scoring:**
+Results are ranked by PostgreSQL's `ts_rank` function:
+- Higher relevance score = better match
+- Multiple word matches increase relevance
+- Results limited to 50 per type (100 total max)
+
+**Errors:**
+- `400` - Missing or empty query parameter
+- `500` - Search failed
+
+**Example Queries:**
+```bash
+# Simple search
+GET /search?q=Christmas
+
+# Multi-word search
+GET /search?q=holiday decorations
+
+# Case-insensitive
+GET /search?q=WINTER
+
+# With special characters (automatically sanitized)
+GET /search?q=pot's & pans!
+```
+
+---
+
 ## File Upload Specifications
 
 ### Allowed Image Types
@@ -344,8 +437,15 @@ curl -X POST http://localhost:3001/api/containers/{id}/items \
   -d '{"name": "Winter Jacket", "quantity": 1}'
 ```
 
+**Search:**
+```bash
+curl "http://localhost:3001/api/search?q=winter"
+```
+
 ### Test Scripts
 - `backend/tests/test-containers.sh` - Automated container API tests
 - `backend/tests/test-items.sh` - Automated item API tests
+- `backend/tests/test-search.sh` - Automated search API tests
 - `backend/tests/container-api.http` - REST Client test file for containers
 - `backend/tests/item-api.http` - REST Client test file for items
+- `backend/tests/search-api.http` - REST Client test file for search
