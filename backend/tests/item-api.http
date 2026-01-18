@@ -1,0 +1,106 @@
+### Item API Test File
+### Use with REST Client extension in VS Code or manually with curl
+
+@baseUrl = http://localhost:3001/api
+# Replace with actual container ID after creating a container
+@containerId = {container-id}
+@itemId = {item-id}
+
+### 1. Create a container first (for testing)
+POST {{baseUrl}}/containers/generate
+Content-Type: application/json
+
+{
+  "color": "Green",
+  "number": 10,
+  "description": "Test container for items"
+}
+
+### 2. Add item to container (without photo)
+POST {{baseUrl}}/containers/{{containerId}}/items
+Content-Type: application/json
+
+{
+  "name": "Winter Jacket - Blue",
+  "description": "Columbia winter jacket, size L, blue color",
+  "quantity": 1
+}
+
+### 3. Add item with photo (multipart form data)
+# Note: This shows the format, but requires actual file in REST Client
+POST {{baseUrl}}/containers/{{containerId}}/items
+Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW
+
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="name"
+
+Red Scarf
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="description"
+
+Hand-knitted red wool scarf
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="quantity"
+
+2
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="photo"; filename="scarf.jpg"
+Content-Type: image/jpeg
+
+< ./test-images/scarf.jpg
+------WebKitFormBoundary7MA4YWxkTrZu0gW--
+
+### 4. Get all items in container
+GET {{baseUrl}}/containers/{{containerId}}/items
+
+### 5. Update item (without photo)
+PUT {{baseUrl}}/items/{{itemId}}
+Content-Type: application/json
+
+{
+  "name": "Winter Jacket - Navy Blue (Updated)",
+  "quantity": 2
+}
+
+### 6. Update item with new photo (multipart form data)
+PUT {{baseUrl}}/items/{{itemId}}
+Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW
+
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="description"
+
+Updated description with new photo
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="photo"; filename="updated.jpg"
+Content-Type: image/jpeg
+
+< ./test-images/updated.jpg
+------WebKitFormBoundary7MA4YWxkTrZu0gW--
+
+### 7. Delete item
+DELETE {{baseUrl}}/items/{{itemId}}
+
+### 8. Try to add item with invalid container ID (should fail with 404)
+POST {{baseUrl}}/containers/00000000-0000-0000-0000-000000000000/items
+Content-Type: application/json
+
+{
+  "name": "This should fail",
+  "quantity": 1
+}
+
+### 9. Try to add item without name (should fail with 400)
+POST {{baseUrl}}/containers/{{containerId}}/items
+Content-Type: application/json
+
+{
+  "description": "Missing name field"
+}
+
+### 10. Try to update with negative quantity (should fail with 400)
+PUT {{baseUrl}}/items/{{itemId}}
+Content-Type: application/json
+
+{
+  "quantity": -5
+}

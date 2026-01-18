@@ -7,6 +7,8 @@ import {
   deleteContainer,
   getContainerItems,
 } from '../controllers/containerController';
+import { addItemToContainer } from '../controllers/itemController';
+import { upload } from '../config/upload';
 
 const router = Router();
 
@@ -25,6 +27,9 @@ router.put('/:id', updateContainer);
 
 // DELETE /api/containers/:id - Delete container
 router.delete('/:id', deleteContainer);
+
+// POST /api/containers/:id/items - Add item to container
+router.post('/:id/items', upload.single('photo'), addItemToContainer);
 
 // GET /api/containers/:id/items - Get items in container
 router.get('/:id/items', getContainerItems);

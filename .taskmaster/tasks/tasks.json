@@ -24,7 +24,7 @@
           "id": "1.2",
           "title": "Container Management API",
           "description": "Implement all container CRUD endpoints with QR code generation",
-          "status": "pending",
+          "status": "done",
           "priority": "high",
           "dependencies": ["1.1"],
           "details": "POST /api/containers/generate, GET /api/containers, GET /api/containers/:qr_code, PUT /api/containers/:id, DELETE /api/containers/:id. Implement QR code generation with 'qrcode' package. Validate color-number format. Enforce uniqueness.",
@@ -34,7 +34,7 @@
           "id": "1.3",
           "title": "Item Management API",
           "description": "Item CRUD with photo upload handling",
-          "status": "pending",
+          "status": "done",
           "priority": "high",
           "dependencies": ["1.2"],
           "details": "POST /api/containers/:id/items, GET /api/containers/:id/items, PUT /api/items/:id, DELETE /api/items/:id. Use multer for file uploads. Store images in uploads/ directory. Validate image size (max 10MB) and type (jpg, png).",
@@ -272,7 +272,7 @@
     "lastModified": "2026-01-18T21:00:00.000Z",
     "projectName": "storage-labels",
     "totalTasks": 24,
-    "completedTasks": 2,
+    "completedTasks": 4,
     "phases": 3
   }
 }
