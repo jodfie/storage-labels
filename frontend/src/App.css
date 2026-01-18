@@ -300,3 +300,186 @@ main {
     height: 200px;
   }
 }
+
+/* QR Scanner */
+.qr-scanner-container {
+  max-width: 500px;
+  margin: 2rem auto;
+}
+
+#qr-reader {
+  border: 2px solid #2563eb;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.scanner-instructions {
+  background: #eff6ff;
+  border: 1px solid #bfdbfe;
+  border-radius: 6px;
+  padding: 1rem;
+  margin-top: 1rem;
+  text-align: center;
+}
+
+.scanner-instructions p {
+  margin: 0.5rem 0;
+  color: #1e40af;
+}
+
+.scan-help {
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 1.5rem;
+  margin: 2rem 0;
+}
+
+.scan-help h3 {
+  margin-top: 0;
+  color: #111827;
+}
+
+.scan-help ul {
+  margin: 1rem 0;
+  padding-left: 1.5rem;
+}
+
+.scan-help li {
+  margin: 0.5rem 0;
+  color: #4b5563;
+}
+
+/* Print Labels - Avery 5160 Format */
+.print-page {
+  padding: 1rem;
+}
+
+.print-controls {
+  margin-bottom: 2rem;
+}
+
+.avery-5160 {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0;
+  max-width: 8.5in;
+  margin: 0 auto;
+}
+
+.label {
+  width: 2.625in;
+  height: 1in;
+  border: 1px dashed #ccc;
+  display: flex;
+  align-items: center;
+  padding: 0.1in;
+  gap: 0.1in;
+  box-sizing: border-box;
+  page-break-inside: avoid;
+}
+
+.label-qr {
+  flex-shrink: 0;
+}
+
+.label-qr img {
+  width: 0.7in;
+  height: 0.7in;
+  display: block;
+}
+
+.label-info {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.label-code {
+  font-weight: bold;
+  font-size: 11pt;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.label-desc {
+  font-size: 7pt;
+  color: #666;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-top: 2px;
+}
+
+/* Print styles */
+@media print {
+  .no-print {
+    display: none !important;
+  }
+
+  .app-header {
+    display: none !important;
+  }
+
+  .print-page {
+    padding: 0;
+    margin: 0;
+  }
+
+  .avery-5160 {
+    max-width: none;
+    width: 8.5in;
+    margin: 0.5in 0.1875in;
+  }
+
+  .label {
+    border: none;
+    break-inside: avoid;
+  }
+
+  @page {
+    size: letter;
+    margin: 0.5in 0.1875in;
+  }
+}
+
+/* Search Filters */
+.search-filters {
+  display: flex;
+  gap: 1rem;
+  margin: 1rem 0;
+  flex-wrap: wrap;
+  background: white;
+  padding: 1rem;
+  border-radius: 8px;
+  border: 1px solid #e5e7eb;
+}
+
+.filter-group {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.filter-group label {
+  font-weight: 500;
+  color: #374151;
+  font-size: 0.875rem;
+}
+
+.filter-group select {
+  padding: 0.5rem;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  background: white;
+  font-size: 0.875rem;
+  cursor: pointer;
+}
+
+.filter-group select:focus {
+  outline: none;
+  border-color: #2563eb;
+}

@@ -1,13 +1,16 @@
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { search } from '../lib/api';
-import { SearchResponse, SearchResult, COLOR_HEX_CODES } from '../types';
+import { SearchResponse, SearchResult, COLOR_HEX_CODES, VALID_COLORS } from '../types';
 
 export default function Search() {
   const [query, setQuery] = useState('');
   const [results, setResults] = useState<SearchResult[]>([]);
   const [loading, setLoading] = useState(false);
   const [searched, setSearched] = useState(false);
+  const [filterColor, setFilterColor] = useState<string>('all');
+  const [filterType, setFilterType] = useState<string>('all');
+  const [sortBy, setSortBy] = useState<string>('relevance');
 
   async function handleSearch(e: React.FormEvent) {
     e.preventDefault();
@@ -26,6 +29,30 @@ export default function Search() {
       setLoading(false);
     }
   }
+
+  const filteredResults = useMemo(() => {
+    let filtered = [...results];
+    
+    // Filter by color
+    if (filterColor !== 'all') {
+      filtered = filtered.filter(r => r.container_color === filterColor);
+    }
+    
+    // Filter by type
+    if (filterType !== 'all') {
+      filtered = filtered.filter(r => r.type === filterType);
+    }
+    
+    // Sort results
+    if (sortBy === 'color') {
+      filtered.sort((a, b) => a.container_color.localeCompare(b.container_color));
+    } else if (sortBy === 'qr') {
+      filtered.sort((a, b) => a.container_qr_code.localeCompare(b.container_qr_code));
+    }
+    // relevance is already sorted from API
+    
+    return filtered;
+  }, [results, filterColor, filterType, sortBy]);
 
   return (
     <div className="container">
@@ -53,9 +80,51 @@ export default function Search() {
 
       {!loading && results.length > 0 && (
         <div className="search-results">
-          <p>Found {results.length} thing{results.length !== 1 ? 's' : ''}!</p>
+          <div className="search-filters">
+            <div className="filter-group">
+              <label htmlFor="color-filter">Color:</label>
+              <select 
+                id="color-filter" 
+                value={filterColor} 
+                onChange={(e) => setFilterColor(e.target.value)}
+              >
+                <option value="all">All Colors</option>
+                {VALID_COLORS.map(color => (
+                  <option key={color} value={color}>{color}</option>
+                ))}
+              </select>
+            </div>
+
+            <div className="filter-group">
+              <label htmlFor="type-filter">Type:</label>
+              <select 
+                id="type-filter" 
+                value={filterType} 
+                onChange={(e) => setFilterType(e.target.value)}
+              >
+                <option value="all">All Types</option>
+                <option value="container">Containers</option>
+                <option value="item">Items</option>
+              </select>
+            </div>
+
+            <div className="filter-group">
+              <label htmlFor="sort-by">Sort by:</label>
+              <select 
+                id="sort-by" 
+                value={sortBy} 
+                onChange={(e) => setSortBy(e.target.value)}
+              >
+                <option value="relevance">Relevance</option>
+                <option value="color">Color</option>
+                <option value="qr">QR Code</option>
+              </select>
+            </div>
+          </div>
+
+          <p>Showing {filteredResults.length} of {results.length} result{results.length !== 1 ? 's' : ''}!</p>
           
-          {results.map((result, index) => {
+          {filteredResults.map((result, index) => {
             const colorHex = COLOR_HEX_CODES[result.container_color as keyof typeof COLOR_HEX_CODES];
             
             return (

@@ -177,4 +177,26 @@ export const search = {
   query: (q: string) => fetchJSON(`/search?q=${encodeURIComponent(q)}`),
 };
 
+// Location API
+export const locations = {
+  getAll: () => fetchJSON('/locations'),
+
+  create: (data: { name: string; description?: string }) =>
+    fetchJSON('/locations', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    }),
+
+  update: (id: string, data: { name: string; description?: string }) =>
+    fetchJSON(`/locations/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify(data),
+    }),
+
+  delete: (id: string) =>
+    fetchJSON(`/locations/${id}`, {
+      method: 'DELETE',
+    }),
+};
+
 export { ApiError };

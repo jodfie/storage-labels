@@ -111,3 +111,144 @@ code {
   font-size: 0.875rem;
   margin-top: 0.5rem;
 }
+
+/* Dark Mode */
+@media (prefers-color-scheme: dark) {
+  body {
+    background: #111827;
+    color: #f9fafb;
+  }
+
+  .app-header {
+    background: #1f2937;
+  }
+
+  .container-card,
+  .item-card,
+  .search-result-card,
+  .search-filters,
+  .scan-help,
+  .qr-code-section {
+    background: #1f2937;
+    border-color: #374151;
+    color: #f9fafb;
+  }
+
+  .container-header h3,
+  .result-header h3,
+  .item-info h3 {
+    color: #f9fafb;
+  }
+
+  .container-description,
+  .result-description {
+    color: #d1d5db;
+  }
+
+  .container-location,
+  .result-location {
+    color: #9ca3af;
+  }
+
+  .form-group input,
+  .form-group textarea,
+  .form-group select,
+  .filter-group select,
+  .search-input {
+    background: #374151;
+    border-color: #4b5563;
+    color: #f9fafb;
+  }
+
+  .btn {
+    background: #374151;
+    color: #f9fafb;
+  }
+
+  .btn:hover {
+    background: #4b5563;
+  }
+
+  .info-box {
+    background: #1e3a5f;
+    border-color: #1e40af;
+  }
+
+  .info-box p {
+    color: #93c5fd;
+  }
+
+  .label {
+    border-color: #374151;
+  }
+}
+
+/* Better loading spinner */
+.loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+.loading::after {
+  content: '';
+  width: 40px;
+  height: 40px;
+  border: 4px solid #e5e7eb;
+  border-top-color: #2563eb;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+@media (prefers-color-scheme: dark) {
+  .loading::after {
+    border-color: #374151;
+    border-top-color: #60a5fa;
+  }
+}
+
+/* Toast notifications */
+.toast {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 1rem 1.5rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  animation: slideIn 0.3s ease-out;
+  z-index: 1000;
+}
+
+.toast.success {
+  border-left: 4px solid #10b981;
+}
+
+.toast.error {
+  border-left: 4px solid #ef4444;
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateX(400px);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  .toast {
+    background: #1f2937;
+    border-color: #374151;
+    color: #f9fafb;
+  }
+}

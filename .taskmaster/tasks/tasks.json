@@ -26,7 +26,9 @@
           "description": "Implement all container CRUD endpoints with QR code generation",
           "status": "done",
           "priority": "high",
-          "dependencies": ["1.1"],
+          "dependencies": [
+            "1.1"
+          ],
           "details": "POST /api/containers/generate, GET /api/containers, GET /api/containers/:qr_code, PUT /api/containers/:id, DELETE /api/containers/:id. Implement QR code generation with 'qrcode' package. Validate color-number format. Enforce uniqueness.",
           "testStrategy": "Postman/curl tests for all endpoints. Verify QR code uniqueness. Test invalid color/number combos."
         },
@@ -36,7 +38,9 @@
           "description": "Item CRUD with photo upload handling",
           "status": "done",
           "priority": "high",
-          "dependencies": ["1.2"],
+          "dependencies": [
+            "1.2"
+          ],
           "details": "POST /api/containers/:id/items, GET /api/containers/:id/items, PUT /api/items/:id, DELETE /api/items/:id. Use multer for file uploads. Store images in uploads/ directory. Validate image size (max 10MB) and type (jpg, png).",
           "testStrategy": "Test file uploads with curl -F. Verify image storage. Test with large files. Test cascade delete."
         },
@@ -46,7 +50,9 @@
           "description": "Full-text search across containers and items",
           "status": "done",
           "priority": "medium",
-          "dependencies": ["1.3"],
+          "dependencies": [
+            "1.3"
+          ],
           "details": "GET /api/search?q={query}. Use PostgreSQL full-text search with ts_vector. Search across container descriptions and item names/descriptions. Return results with container context.",
           "testStrategy": "Test various search queries. Verify relevance ranking. Test special characters."
         },
@@ -56,7 +62,9 @@
           "description": "React app with routing, API client, state management",
           "status": "done",
           "priority": "high",
-          "dependencies": ["1.1"],
+          "dependencies": [
+            "1.1"
+          ],
           "details": "Already completed - Vite + React + TypeScript setup at frontend/. Need to add: routing (react-router-dom), API client (axios or fetch), state management (Context API or Zustand), error boundaries.",
           "testStrategy": "npm run dev works. Can navigate between routes. API calls work."
         },
@@ -66,7 +74,10 @@
           "description": "Container list, detail, create, edit, delete views with QR display",
           "status": "done",
           "priority": "high",
-          "dependencies": ["1.2", "1.5"],
+          "dependencies": [
+            "1.2",
+            "1.5"
+          ],
           "details": "Components: ContainerList, ContainerDetail, ContainerForm, QRCodeDisplay. Features: Grid/list toggle, color-coded cards, QR code image display, location display, edit/delete actions. Mobile-first responsive design.",
           "testStrategy": "Create container end-to-end. Edit container. Delete container. Verify QR code displays correctly."
         },
@@ -76,7 +87,10 @@
           "description": "Item list within container, add/edit/delete with camera integration",
           "status": "done",
           "priority": "high",
-          "dependencies": ["1.3", "1.6"],
+          "dependencies": [
+            "1.3",
+            "1.6"
+          ],
           "details": "Components: ItemList, ItemForm, PhotoCapture. Use browser Camera API or file input fallback. Compress images before upload. Show photo thumbnails. Quantity spinner. Mobile-optimized forms.",
           "testStrategy": "Add item with camera photo. Add item with file upload. Edit item. Delete item. Verify cascade delete."
         },
@@ -86,7 +100,10 @@
           "description": "Search input with results display and container linking",
           "status": "done",
           "priority": "medium",
-          "dependencies": ["1.4", "1.7"],
+          "dependencies": [
+            "1.4",
+            "1.7"
+          ],
           "details": "Components: SearchBar, SearchResults. Debounced input. Highlight matching terms. Group results by container. Click result to navigate to container detail. Empty state when no results.",
           "testStrategy": "Search for items. Click results. Verify navigation. Test empty query. Test no results."
         }
@@ -96,9 +113,11 @@
       "id": "2",
       "title": "Phase 2: Enhanced Features",
       "description": "PWA capabilities and improved user experience",
-      "status": "pending",
+      "status": "done",
       "priority": "medium",
-      "dependencies": ["1"],
+      "dependencies": [
+        "1"
+      ],
       "details": "Build upon MVP with advanced features",
       "testStrategy": "PWA audit with Lighthouse. Test offline. Mobile testing.",
       "subtasks": [
@@ -106,9 +125,11 @@
           "id": "2.1",
           "title": "PWA Configuration",
           "description": "Web App Manifest, service worker, offline page, icons",
-          "status": "pending",
+          "status": "done",
           "priority": "medium",
-          "dependencies": ["1.8"],
+          "dependencies": [
+            "1.8"
+          ],
           "details": "Create manifest.json with app metadata, icons (192x192, 512x512), theme colors. Add to index.html. Configure Vite PWA plugin or vite-plugin-pwa. Generate splash screens for iOS.",
           "testStrategy": "Install app on mobile. Verify icons. Check Add to Home Screen. Lighthouse PWA audit."
         },
@@ -116,9 +137,11 @@
           "id": "2.2",
           "title": "Offline Mode",
           "description": "Cache API, IndexedDB for offline data, sync",
-          "status": "pending",
+          "status": "done",
           "priority": "medium",
-          "dependencies": ["2.1"],
+          "dependencies": [
+            "2.1"
+          ],
           "details": "Service worker caches static assets. IndexedDB for offline container/item data. Background sync when online. Offline indicator in UI. Conflict resolution (last-write-wins).",
           "testStrategy": "Disconnect network. Add container offline. Reconnect. Verify sync. Test conflicts."
         },
@@ -126,9 +149,11 @@
           "id": "2.3",
           "title": "QR Code Scanning",
           "description": "html5-qrcode integration for camera scanning",
-          "status": "pending",
+          "status": "done",
           "priority": "high",
-          "dependencies": ["1.6"],
+          "dependencies": [
+            "1.6"
+          ],
           "details": "Install html5-qrcode package. Create QRScanner component. Request camera permissions. Decode QR code. Navigate to scanned container. Handle scan errors. Mobile camera optimization.",
           "testStrategy": "Scan physical QR code. Verify navigation. Test camera permissions denial. Test invalid QR codes."
         },
@@ -136,9 +161,11 @@
           "id": "2.4",
           "title": "Print Features",
           "description": "Printable QR labels with Avery templates",
-          "status": "pending",
+          "status": "done",
           "priority": "medium",
-          "dependencies": ["1.6"],
+          "dependencies": [
+            "1.6"
+          ],
           "details": "Create PrintLabels component. CSS for print media. Avery 5160 compatible layout (30 labels per sheet). Multiple labels per print. Color-coded borders. Print dialog integration.",
           "testStrategy": "Print labels. Verify alignment on Avery 5160. Test multiple labels. Scan printed QR."
         },
@@ -146,9 +173,11 @@
           "id": "2.5",
           "title": "Location Management",
           "description": "Location CRUD, selection UI, custom locations",
-          "status": "pending",
+          "status": "done",
           "priority": "low",
-          "dependencies": ["1.6"],
+          "dependencies": [
+            "1.6"
+          ],
           "details": "Components: LocationManager, LocationSelector. Backend: GET/POST/PUT/DELETE /api/locations. Predefined locations seeded in database. Add custom location form. Dropdown selector in container form.",
           "testStrategy": "Add custom location. Assign container to location. Edit location. Delete unused location."
         },
@@ -156,9 +185,11 @@
           "id": "2.6",
           "title": "Advanced Search",
           "description": "Filters, sorting, pagination, search history",
-          "status": "pending",
+          "status": "done",
           "priority": "low",
-          "dependencies": ["1.8"],
+          "dependencies": [
+            "1.8"
+          ],
           "details": "Filter by: location, color, date range. Sort by: date, name, relevance. Pagination (20 per page). Store recent searches in localStorage. Clear search history.",
           "testStrategy": "Apply filters. Change sort. Navigate pages. Verify search history."
         },
@@ -166,9 +197,11 @@
           "id": "2.7",
           "title": "Photo Gallery",
           "description": "Grid view of all photos with lightbox",
-          "status": "pending",
+          "status": "done",
           "priority": "low",
-          "dependencies": ["1.7"],
+          "dependencies": [
+            "1.7"
+          ],
           "details": "GET /api/photos endpoint returning all item photos. Photo grid component. Lightbox for full-size view (use library like react-image-lightbox). Photo navigation (prev/next). Download photo button.",
           "testStrategy": "View gallery. Open lightbox. Navigate photos. Download photo."
         },
@@ -176,9 +209,11 @@
           "id": "2.8",
           "title": "UI Polish",
           "description": "Dark mode, loading states, empty states, notifications",
-          "status": "pending",
+          "status": "done",
           "priority": "low",
-          "dependencies": ["1.8"],
+          "dependencies": [
+            "1.8"
+          ],
           "details": "Dark mode toggle with localStorage persistence. Loading spinners for API calls. Empty states with illustrations. Toast notifications for success/error. Skeleton loaders. Responsive breakpoints (mobile/tablet/desktop).",
           "testStrategy": "Toggle dark mode. Verify persistence. Test all loading states. Test all empty states."
         }
@@ -190,7 +225,9 @@
       "description": "Production deployment and optional integrations",
       "status": "pending",
       "priority": "low",
-      "dependencies": ["2"],
+      "dependencies": [
+        "2"
+      ],
       "details": "Deploy to storage.redleif.dev",
       "testStrategy": "Production testing. Performance monitoring.",
       "subtasks": [
@@ -200,7 +237,9 @@
           "description": "Production Dockerfiles and docker-compose",
           "status": "pending",
           "priority": "high",
-          "dependencies": ["2.8"],
+          "dependencies": [
+            "2.8"
+          ],
           "details": "Multi-stage Dockerfile for frontend (build + nginx). Production Dockerfile for backend. docker-compose.yml for production. Environment variable management (.env.production). Volume configuration for uploads and database. Health checks.",
           "testStrategy": "Build production images. Run docker-compose up. Verify all services. Test persistence."
         },
@@ -210,7 +249,9 @@
           "description": "Configure tunnel for storage.redleif.dev",
           "status": "pending",
           "priority": "high",
-          "dependencies": ["3.1"],
+          "dependencies": [
+            "3.1"
+          ],
           "details": "Add storage.redleif.dev to /home/jodfie/docker/swag/config/tunnelconfig.yml. Point to frontend service. Configure SSL/TLS. Test Cloudflare Access authentication. Update DNS if needed.",
           "testStrategy": "Access https://storage.redleif.dev. Verify SSL. Test authentication. Check all routes."
         },
@@ -220,7 +261,9 @@
           "description": "Automated pg_dump with external storage",
           "status": "pending",
           "priority": "medium",
-          "dependencies": ["3.1"],
+          "dependencies": [
+            "3.1"
+          ],
           "details": "Create backup script using pg_dump. Cron job for daily backups. Compress backups (gzip). Upload to cloud storage (S3, Backblaze, etc.). Retention policy (keep 30 days). Restore procedure documentation.",
           "testStrategy": "Run backup manually. Verify backup file. Test restore on fresh database."
         },
@@ -230,7 +273,9 @@
           "description": "Export containers/items to CSV/JSON",
           "status": "pending",
           "priority": "low",
-          "dependencies": ["2.8"],
+          "dependencies": [
+            "2.8"
+          ],
           "details": "Backend: GET /api/export/containers, GET /api/export/items, GET /api/export/all. Frontend: Export button with format selection. Download as file. Import endpoints for restore.",
           "testStrategy": "Export all data. Verify CSV format. Verify JSON format. Import exported data."
         },
@@ -240,7 +285,9 @@
           "description": "Touch gestures, iOS/Android PWA features",
           "status": "pending",
           "priority": "low",
-          "dependencies": ["2.1"],
+          "dependencies": [
+            "2.1"
+          ],
           "details": "Swipe gestures for delete. Pull-to-refresh. iOS splash screens. Android TWA configuration. Haptic feedback. Prevent zoom on inputs. iOS safe area handling.",
           "testStrategy": "Test on iOS Safari. Test on Android Chrome. Verify gestures. Check splash screens."
         },
@@ -250,7 +297,9 @@
           "description": "Shortcuts for scan, add item, search",
           "status": "deferred",
           "priority": "low",
-          "dependencies": ["3.2"],
+          "dependencies": [
+            "3.2"
+          ],
           "details": "Create iOS Shortcuts that deep link into app. Scan container shortcut. Add item to last container shortcut. Quick search shortcut. Share to app integration.",
           "testStrategy": "Create shortcuts. Test deep links. Verify app launches correctly."
         },
@@ -260,7 +309,9 @@
           "description": "Export inventory to markdown knowledge base",
           "status": "deferred",
           "priority": "low",
-          "dependencies": ["3.4"],
+          "dependencies": [
+            "3.4"
+          ],
           "details": "Export format compatible with BasicMemory. Markdown files for each container. Link to original photos. Automatic sync option. Archive documentation templates.",
           "testStrategy": "Export to BasicMemory. Verify markdown format. Check links work."
         }
@@ -272,7 +323,7 @@
     "lastModified": "2026-01-18T22:00:00.000Z",
     "projectName": "storage-labels",
     "totalTasks": 24,
-    "completedTasks": 8,
+    "completedTasks": 15,
     "phases": 3
   }
 }

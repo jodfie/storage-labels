@@ -5,6 +5,7 @@ import { errorHandler } from './middleware/errorHandler';
 import containerRoutes from './routes/containers';
 import itemRoutes from './routes/items';
 import searchRoutes from './routes/search';
+import locationRoutes from './routes/locations';
 
 dotenv.config();
 
@@ -28,6 +29,7 @@ app.get('/api/health', (req, res) => {
 app.use('/api/containers', containerRoutes);
 app.use('/api/items', itemRoutes);
 app.use('/api/search', searchRoutes);
+app.use('/api/locations', locationRoutes);
 
 // Error handling middleware
 app.use(errorHandler);
