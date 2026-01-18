@@ -1,35 +1,40 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
+import { AppProvider } from './context/AppContext';
+import Home from './pages/Home';
+import Search from './pages/Search';
+import NewContainer from './pages/NewContainer';
+import ContainerDetail from './pages/ContainerDetail';
+import NewItem from './pages/NewItem';
+import './App.css';
 
 function App() {
-  const [count, setCount] = useState(0)
-
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    <AppProvider>
+      <BrowserRouter>
+        <div className="app">
+          <header className="app-header">
+            <h1>
+              <Link to="/">📦 Storage Labels</Link>
+            </h1>
+            <nav>
+              <Link to="/">Home</Link>
+              <Link to="/search">Search</Link>
+            </nav>
+          </header>
+          <main>
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/search" element={<Search />} />
+              <Route path="/containers/new" element={<NewContainer />} />
+              <Route path="/containers/:qrCode" element={<ContainerDetail />} />
+              <Route path="/containers/:qrCode/items/new" element={<NewItem />} />
+              <Route path="*" element={<div>I don't know where this goes!</div>} />
+            </Routes>
+          </main>
+        </div>
+      </BrowserRouter>
+    </AppProvider>
+  );
 }
 
-export default App
+export default App;
