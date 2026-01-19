@@ -17,7 +17,7 @@ export default function NewContainer() {
       setLoading(true);
       setError(null);
       
-      const newContainer = await containers.generate({
+      await containers.generate({
         description: description || undefined,
         location_text: locationText || undefined,
       });

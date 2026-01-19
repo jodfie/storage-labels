@@ -46,9 +46,8 @@ export default function QRScanner() {
     navigate(`/containers/${decodedText}`);
   }
 
-  function onScanFailure(error: any) {
+  function onScanFailure() {
     // This happens a lot when scanning, so we don't log it
-    // console.warn(`QR scan error:`, error);
   }
 
   return (

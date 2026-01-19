@@ -3,13 +3,18 @@
 const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001/api';
 
 class ApiError extends Error {
+  status: number;
+  data?: any;
+  
   constructor(
     message: string,
-    public status: number,
-    public data?: any
+    status: number,
+    data?: any
   ) {
     super(message);
     this.name = 'ApiError';
+    this.status = status;
+    this.data = data;
   }
 }
 
@@ -197,6 +202,29 @@ export const locations = {
     fetchJSON(`/locations/${id}`, {
       method: 'DELETE',
     }),
+};
+
+// Export API - Downloads files
+export const exportData = {
+  containersJSON: () => {
+    window.location.href = `${API_BASE_URL}/export/containers.json`;
+  },
+
+  containersCSV: () => {
+    window.location.href = `${API_BASE_URL}/export/containers.csv`;
+  },
+
+  itemsJSON: () => {
+    window.location.href = `${API_BASE_URL}/export/items.json`;
+  },
+
+  itemsCSV: () => {
+    window.location.href = `${API_BASE_URL}/export/items.csv`;
+  },
+
+  allJSON: () => {
+    window.location.href = `${API_BASE_URL}/export/all.json`;
+  },
 };
 
 export { ApiError };

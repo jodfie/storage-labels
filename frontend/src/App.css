@@ -483,3 +483,120 @@ main {
   outline: none;
   border-color: #2563eb;
 }
+
+/* Export Page */
+.export-sections {
+  display: grid;
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+.export-section {
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 1.5rem;
+}
+
+.export-section h2 {
+  margin-top: 0;
+  color: #111827;
+}
+
+.export-section p {
+  color: #6b7280;
+  margin: 0.5rem 0 1rem 0;
+}
+
+.export-buttons {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+@media (prefers-color-scheme: dark) {
+  .export-section {
+    background: #1f2937;
+    border-color: #374151;
+  }
+
+  .export-section h2 {
+    color: #f9fafb;
+  }
+
+  .export-section p {
+    color: #d1d5db;
+  }
+}
+
+/* Mobile Optimizations */
+@media (max-width: 768px) {
+  /* Larger tap targets for mobile */
+  .btn {
+    padding: 1rem 1.75rem;
+    font-size: 1.125rem;
+    min-height: 48px;
+  }
+
+  /* Better spacing on mobile */
+  .actions {
+    gap: 0.75rem;
+  }
+
+  /* Inputs easier to tap */
+  .form-group input,
+  .form-group textarea,
+  .form-group select,
+  .search-input {
+    font-size: 16px; /* Prevents zoom on iOS */
+    padding: 1rem;
+    min-height: 48px;
+  }
+
+  /* Container cards more touch-friendly */
+  .container-card {
+    padding: 1.25rem;
+    margin-bottom: 0.25rem;
+  }
+
+  /* Better nav spacing */
+  .app-header nav {
+    gap: 0.75rem;
+    flex-wrap: wrap;
+  }
+
+  .app-header nav a {
+    padding: 0.75rem 1rem;
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+  }
+}
+
+/* Touch-friendly active states */
+@media (hover: none) and (pointer: coarse) {
+  .btn:active {
+    transform: scale(0.97);
+    background: rgba(0, 0, 0, 0.05);
+  }
+
+  .btn-primary:active {
+    background: #1d4ed8;
+    transform: scale(0.97);
+  }
+
+  .container-card:active {
+    transform: scale(0.98);
+    opacity: 0.9;
+  }
+}
+
+/* Prevent text selection on interactive elements */
+.btn,
+.container-card,
+.item-card,
+.search-result-card,
+nav a {
+  -webkit-user-select: none;
+  user-select: none;
+}

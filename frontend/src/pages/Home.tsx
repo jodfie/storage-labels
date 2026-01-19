@@ -1,17 +1,49 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { containers } from '../lib/api';
-import { Container } from '../types';
+import type { Container } from '../types';
 import ContainerCard from '../components/ContainerCard';
+import { haptics } from '../utils/haptics';
 
 export default function Home() {
   const [containerList, setContainerList] = useState<Container[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [pullStartY, setPullStartY] = useState(0);
+  const [isPulling, setIsPulling] = useState(false);
 
   useEffect(() => {
     loadContainers();
   }, []);
+
+  // Pull-to-refresh handlers
+  function handleTouchStart(e: React.TouchEvent) {
+    if (window.scrollY === 0) {
+      setPullStartY(e.touches[0].clientY);
+    }
+  }
+
+  function handleTouchMove(e: React.TouchEvent) {
+    if (pullStartY > 0) {
+      const pullDistance = e.touches[0].clientY - pullStartY;
+      if (pullDistance > 80 && !loading) {
+        setIsPulling(true);
+        haptics.light();
+      }
+    }
+  }
+
+  function handleTouchEnd() {
+    if (isPulling && !loading) {
+      setIsPulling(false);
+      setPullStartY(0);
+      loadContainers();
+      haptics.success();
+    } else {
+      setPullStartY(0);
+      setIsPulling(false);
+    }
+  }
 
   async function loadContainers() {
     try {
@@ -27,7 +59,17 @@ export default function Home() {
   }
 
   return (
-    <div className="container">
+    <div 
+      className="container"
+      onTouchStart={handleTouchStart}
+      onTouchMove={handleTouchMove}
+      onTouchEnd={handleTouchEnd}
+    >
+      {isPulling && (
+        <div style={{ textAlign: 'center', padding: '1rem', color: '#2563eb' }}>
+          🔄 Release to refresh!
+        </div>
+      )}
       <h1>📦 My Containers</h1>
       <p>I'm keeping track of all my stuff!</p>
       

@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { containers } from '../lib/api';
-import { Container, Item, COLOR_HEX_CODES } from '../types';
+import type { Container, Item } from '../types';
+import { COLOR_HEX_CODES } from '../types';
 
 export default function ContainerDetail() {
   const { qrCode } = useParams<{ qrCode: string }>();

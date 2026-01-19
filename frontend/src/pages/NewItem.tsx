@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { containers } from '../lib/api';
-import { Container } from '../types';
+import type { Container } from '../types';
 
 export default function NewItem() {
   const { qrCode } = useParams<{ qrCode: string }>();

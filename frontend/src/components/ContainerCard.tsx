@@ -1,4 +1,5 @@
-import { Container, COLOR_HEX_CODES } from '../types';
+import type { Container } from '../types';
+import { COLOR_HEX_CODES } from '../types';
 
 interface Props {
   container: Container;

@@ -6,6 +6,7 @@ import containerRoutes from './routes/containers';
 import itemRoutes from './routes/items';
 import searchRoutes from './routes/search';
 import locationRoutes from './routes/locations';
+import exportRoutes from './routes/export';
 
 dotenv.config();
 
@@ -30,6 +31,7 @@ app.use('/api/containers', containerRoutes);
 app.use('/api/items', itemRoutes);
 app.use('/api/search', searchRoutes);
 app.use('/api/locations', locationRoutes);
+app.use('/api/export', exportRoutes);
 
 // Error handling middleware
 app.use(errorHandler);

@@ -1,7 +1,8 @@
 import { useState, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { search } from '../lib/api';
-import { SearchResponse, SearchResult, COLOR_HEX_CODES, VALID_COLORS } from '../types';
+import type { SearchResponse, SearchResult } from '../types';
+import { COLOR_HEX_CODES, VALID_COLORS } from '../types';
 
 export default function Search() {
   const [query, setQuery] = useState('');

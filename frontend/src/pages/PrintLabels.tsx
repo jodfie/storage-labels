@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { containers } from '../lib/api';
-import { Container, COLOR_HEX_CODES } from '../types';
+import type { Container } from '../types';
+import { COLOR_HEX_CODES } from '../types';
 
 export default function PrintLabels() {
   const [searchParams] = useSearchParams();
