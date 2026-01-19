@@ -212,13 +212,19 @@ haptics.delete()   // Delete action
 
 ## 🌐 Live Deployment
 
-**Production URL:** https://storage-dev.redleif.dev
+**Production URL:** https://storage.redleif.dev ⭐
+**Development URL:** https://storage-dev.redleif.dev
 
 The app is live and accessible from anywhere! The Cloudflare tunnel was configured via API with:
-- Tunnel ingress rule for storage-dev.redleif.dev
-- DNS CNAME record automatically created
+- Tunnel ingress rules for both production and development
+- DNS CNAME records automatically created
 - Container connected to reverse_proxy network
 - HTTPS enabled with Cloudflare proxy
+
+### Git Deployment:
+- ✅ Dev branch pushed to GitHub
+- ✅ Dev merged to master branch
+- ✅ Master pushed to GitHub (production ready)
 
 ## 📝 Notes
 

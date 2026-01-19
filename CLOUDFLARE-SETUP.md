@@ -2,7 +2,9 @@
 
 ## ✅ LIVE AND WORKING!
 
-Your Storage Labels app is **live** at **https://storage-dev.redleif.dev**!
+Your Storage Labels app is **live** at:
+- **Production:** https://storage.redleif.dev ⭐
+- **Development:** https://storage-dev.redleif.dev
 
 - ✅ Docker containers healthy
 - ✅ Database working
@@ -11,8 +13,9 @@ Your Storage Labels app is **live** at **https://storage-dev.redleif.dev**!
 - ✅ Mobile optimizations complete
 - ✅ All 21 Phase 1-3 tasks done!
 - ✅ Cloudflare Tunnel configured via API
-- ✅ DNS record created automatically
+- ✅ DNS records created automatically
 - ✅ HTTPS working with Cloudflare proxy
+- ✅ Dev merged to master branch
 
 ## 🔧 What Was Done (Automated Setup)
 
@@ -24,32 +27,48 @@ Used infisical-helper to get:
 
 ### 2. Updated Tunnel Configuration via API
 ```bash
-# Added ingress rule for storage-dev.redleif.dev
+# Added ingress rules for both production and development
 curl -X PUT "https://api.cloudflare.com/client/v4/accounts/{ACCOUNT_ID}/cfd_tunnel/{TUNNEL_ID}/configurations"
 ```
 
-Configuration added:
+Configurations added:
 ```json
-{
-  "hostname": "storage-dev.redleif.dev",
-  "service": "http://storage-labels-frontend:80",
-  "originRequest": {
-    "noTLSVerify": true
+[
+  {
+    "hostname": "storage.redleif.dev",
+    "service": "http://storage-labels-frontend:80",
+    "originRequest": {
+      "noTLSVerify": true
+    }
+  },
+  {
+    "hostname": "storage-dev.redleif.dev",
+    "service": "http://storage-labels-frontend:80",
+    "originRequest": {
+      "noTLSVerify": true
+    }
   }
-}
+]
 ```
 
-### 3. Created DNS Record
+### 3. Created DNS Records
 ```bash
-# Created CNAME record automatically via API
+# Created CNAME records automatically via API
 curl -X POST "https://api.cloudflare.com/client/v4/zones/{ZONE_ID}/dns_records"
 ```
 
-DNS Record:
-- Type: CNAME
-- Name: storage-dev
-- Content: 1ac9b97d-7a01-4eb3-a004-c07f2b451b80.cfargotunnel.com
-- Proxied: Yes
+DNS Records:
+- **Production:**
+  - Type: CNAME
+  - Name: storage
+  - Content: 1ac9b97d-7a01-4eb3-a004-c07f2b451b80.cfargotunnel.com
+  - Proxied: Yes
+
+- **Development:**
+  - Type: CNAME
+  - Name: storage-dev
+  - Content: 1ac9b97d-7a01-4eb3-a004-c07f2b451b80.cfargotunnel.com
+  - Proxied: Yes
 
 ### 4. Connected Container to Network
 ```bash
@@ -60,9 +79,16 @@ docker network connect reverse_proxy storage-labels-frontend
 ## 🎉 Result!
 
 Your app is **live** at:
-**https://storage-dev.redleif.dev**
+- **Production:** **https://storage.redleif.dev** ⭐
+- **Development:** **https://storage-dev.redleif.dev**
 
 The tunnel updated automatically - no restart needed!
+
+### Git Status:
+- ✅ Dev branch pushed to GitHub
+- ✅ Dev merged to master
+- ✅ Master pushed to GitHub
+- ✅ Production ready!
 
 ## 📱 Test It
 

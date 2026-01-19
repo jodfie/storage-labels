@@ -43,20 +43,24 @@ A complete QR-based inventory management PWA for tracking physical storage conta
 
 ### Current Status:
 - **App running:** http://localhost:3000
-- **Live URL:** **https://storage-dev.redleif.dev** ✅
+- **Production URL:** **https://storage.redleif.dev** ⭐
+- **Development URL:** **https://storage-dev.redleif.dev** ✅
 - **Docker containers:** All healthy
 - **Database:** PostgreSQL with schema loaded
 - **Backups:** Automated daily at 2 AM
 - **Exports:** Available via /export page
 - **Cloudflare Tunnel:** Configured and working ✅
-- **DNS:** CNAME record created automatically ✅
+- **DNS:** CNAME records created automatically ✅
 - **HTTPS:** Enabled with Cloudflare proxy ✅
+- **Git:** Dev merged to master ✅
 
 ### Setup Complete:
-✅ Cloudflare tunnel configured via API
-✅ DNS CNAME record created automatically
+✅ Cloudflare tunnel configured via API for both prod and dev
+✅ DNS CNAME records created automatically
 ✅ Container connected to reverse_proxy network
 ✅ App accessible from anywhere with HTTPS
+✅ Dev branch merged to master (production ready)
+✅ Both branches pushed to GitHub
 
 ## 📊 Technical Details
 
