@@ -1,14 +1,14 @@
 services:
   postgres:
     image: postgres:15-alpine
-    container_name: storage-labels-db
+    container_name: storage-labels-prod-db
     restart: unless-stopped
     environment:
-      POSTGRES_DB: storage_labels
+      POSTGRES_DB: storage_labels_prod
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: ${DB_PASSWORD:-postgres}
     volumes:
-      - postgres_data:/var/lib/postgresql/data
+      - postgres_data_prod:/var/lib/postgresql/data
       - ./database/schema.sql:/docker-entrypoint-initdb.d/schema.sql:ro
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U postgres"]
@@ -16,24 +16,25 @@ services:
       timeout: 5s
       retries: 5
     networks:
-      - storage-labels
+      - storage-labels-prod
+      - reverse_proxy
 
   backend:
     build:
       context: ./backend
       dockerfile: Dockerfile
-    container_name: storage-labels-backend
+    container_name: storage-labels-prod-backend
     restart: unless-stopped
     environment:
       NODE_ENV: production
       PORT: 3001
       DB_HOST: postgres
       DB_PORT: 5432
-      DB_NAME: storage_labels
+      DB_NAME: storage_labels_prod
       DB_USER: postgres
       DB_PASSWORD: ${DB_PASSWORD:-postgres}
     volumes:
-      - uploads_data:/app/uploads
+      - uploads_data_prod:/app/uploads
     depends_on:
       postgres:
         condition: service_healthy
@@ -44,7 +45,7 @@ services:
       retries: 3
       start_period: 40s
     networks:
-      - storage-labels
+      - storage-labels-prod
 
   frontend:
     build:
@@ -52,7 +53,7 @@ services:
       dockerfile: Dockerfile
       args:
         VITE_API_URL: /api
-    container_name: storage-labels-frontend
+    container_name: storage-labels-prod-frontend
     restart: unless-stopped
     ports:
       - "3000:80"
@@ -64,14 +65,17 @@ services:
       timeout: 10s
       retries: 3
     networks:
-      - storage-labels
+      - storage-labels-prod
+      - reverse_proxy
 
 volumes:
-  postgres_data:
+  postgres_data_prod:
     driver: local
-  uploads_data:
+  uploads_data_prod:
     driver: local
 
 networks:
-  storage-labels:
+  storage-labels-prod:
     driver: bridge
+  reverse_proxy:
+    external: true
